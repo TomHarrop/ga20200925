@@ -1,0 +1,8 @@
+---
+output:
+  beamer_presentation:
+    fig_caption: false
+    fig_crop: false
+classoption:
+    "aspectratio=169"
+---
