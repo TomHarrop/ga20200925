@@ -1,0 +1,359 @@
+
+```{r setup, include=FALSE, results="hide"}
+library(adegenet)
+library(bit64)
+library(data.table)
+library(ggmap)
+library(ggplot2)
+library(scales)
+library(vcfR)
+
+set.seed(42)
+
+# enable Lato on Ubuntu
+my_sis <- Sys.info()["sysname"]
+if (my_sis == "Linux") {
+    sysfonts::font_add(
+        "Lato",
+        regular = "/usr/share/fonts/truetype/lato/Lato-Regular.ttf",
+        bold = "/usr/share/fonts/truetype/lato/Lato-Bold.ttf",
+        italic = "/usr/share/fonts/truetype/lato/Lato-Italic.ttf",
+        bolditalic = "/usr/share/fonts/truetype/lato/Lato-BoldItalic.ttf")
+}
+if(my_sis == "Darwin") {
+    sysfonts::font_add(
+        "Lato",
+        regular = "/Users/tom/Library/Fonts/Lato-Regular.ttf",
+        bold = "/Users/tom/Library/Fonts/Lato-Bold.ttf",
+        italic = "/Users/tom/Library/Fonts/Lato-Italic.ttf",
+        bolditalic = "/Users/tom/Library/Fonts/Lato-BoldItalic.ttf")
+}
+
+# knitr options that work with fig_height: 6, fig_width: 8, and fig_crop: false
+# in beamer presentations
+fh <- grid::convertUnit(unit(227, "pt"), "in", valueOnly = TRUE)
+fw <- grid::convertUnit(unit(398, "pt"), "in", valueOnly = TRUE)
+knitr::opts_chunk$set(
+    dev.args=list(bg = "transparent",
+                  family = "Lato",
+                  pointsize = 8),
+    dev="cairo_pdf",
+    echo = FALSE,
+    message = FALSE,
+    warning = FALSE,
+    cache = TRUE,
+    fig.align = 'center',
+    # out.width = "0.8\\textwidth",
+    # out.height  ="0.8\\textheight")
+    fig.height = fh * 0.9,
+    fig.width = fw,
+    out.width = NULL,
+    out.height = NULL)
+```
+
+```{r globals, include=FALSE, results="hide"}
+# colour scheme for plots
+viridis_d <- viridis::viridis_pal()
+heatscale <- RColorBrewer::brewer.pal(6, "YlOrRd")
+
+pop_order <- c(
+    "Coromandel" = "Coromandel",
+    "Ruakura" = "Ruakura",
+    "Taranaki" = "Taranaki",
+    "Wellington" = "Wellington",
+    "Greymouth" = "Greymouth",
+    "Lincoln" = "Lincoln",
+    "O" = "Ophir",
+    "Mararoa" = "Mararoa Downs",
+    "Mossburn" = "Mossburn",
+    "Fortrose" = "Fortrose")
+
+vcf_file <- "data/populations.geo.pruned.vcf"
+```
+
+```{r data_proc, include=FALSE, results="hide"}
+vcf <- read.vcfR(vcf_file)
+snp_data <- vcfR2genlight(vcf)
+
+# impute NAs on mean
+na_means <- tab(snp_data, NA.method = "mean")
+snps_imputed <- new("genlight", na_means)
+ploidy(snps_imputed) <- 2
+
+# add pop
+pops <- gsub("^[[:alpha:]]+_([[:alpha:]]+).*", "\\1", snps_imputed$ind.names)
+pop(snps_imputed) <- factor(pops, levels = names(pop_order))
+
+# set up a plot title
+gt <- paste0(length(unique(snps_imputed$ind.names)),
+             " individuals genotyped at ", 
+             format(snps_imputed$n.loc, big.mark = ","),
+             " loci")
+
+```
+
+```{r nz_map, include=FALSE, results="hide"}
+nz_sm <- readRDS("data/nz_map_sm.Rds")
+wgs84_loc <- fread("data/manual_locations_with_wgs84.csv")[location != "Reefton"]
+
+wgs84_loc[, loc_code := paste0(location, " (", code, ")")]
+setorder(wgs84_loc, -lat)
+wgs84_loc[, loc_code := factor(loc_code, levels = rev(loc_code))]
+wgs84_loc[, code_loc := paste0(code, " (", location, ")")]
+
+lon_bump <- 0.40
+lat_bump <- 0
+
+nz_map <- ggmap(nz_sm) +
+    theme_minimal(base_size = 8) +
+    theme(legend.key.size = unit(0.5, "lines")) +
+    scale_x_continuous(expand = c(0, 0),
+                       limits = c(165, 180)) +
+    scale_y_continuous(expand = c(0, 0),
+                       limits = c(-47, -35)) +
+    xlab("Longitude") + ylab("Latitude") +
+    geom_point(mapping = aes(x = lon,
+                             y = lat,
+                             fill = loc_code),
+               colour = "black",
+               shape = 21,
+               size = 2,
+               data = wgs84_loc) +
+    geom_text(mapping = aes(x = lon + lon_bump,
+                            y = lat - lat_bump,
+                            label = toupper(location)),
+              colour = "black",
+              size = 2,
+              hjust = "left",
+              vjust = 0.5,
+              data = wgs84_loc) +
+    # fontface = "bold") +
+    geom_text(mapping = aes(x = lon - lon_bump,
+                            y = lat - lat_bump,
+                            label = n),
+              colour = "black",
+              size = 2,
+              hjust = "right",
+              vjust = 0.5,
+              data = wgs84_loc) +
+    # fontface = "bold") +
+    scale_fill_viridis_d(guide = FALSE)
+
+```
+
+# Pasture in NZ, damage by weevils
+
+![](img/Paddock28_21.2.17.jpg){height=75mm}
+
+# Biology of weevils
+
+
+
+# Can't be controlled by insecticides
+
+![](img/Argentine-stem-weevil-larvae-in-ryegrass-stem2.jpg){height=70mm}
+
+\source{\href{http://agpest.co.nz/?pesttypes=argentine-stem-weevil-larvae}{AgPest}}
+
+# Control by *M. hyp*
+
+![](img/1295012-PPT.jpg){height=70mm}
+
+\source{Braconid wasp \emph{Microctonus hyperodae} by Mark McNeill, \href{https://creativecommons.org/licenses/by/3.0/us/}{CC-BY-3.0}.}
+
+# Decline in effectiveness
+
+# Introduce unequal arms race
+
+# Geographical survey
+
+```{r geo_surv}
+print(nz_map)
+```
+\source{
+Map tiles by
+\href{http://stamen.com}{Stamen Design} under \href{http://creativecommons.org/licenses/by/3.0}{CC BY 3.0}, with data by \href{http://openstreetmap.org}{OpenStreetMap} under \href{http://www.openstreetmap.org/copyright}{ODbL}.}
+
+# Need for a genome
+
+# Illumina genome
+
+\begincols[c]
+\begincol{0.6\textwidth}
+
+```{r kmer_plot, fig.width = fw * 0.6}
+hist_before_file <- "data/asw_hist.txt"
+hist_after_file <- "data/asw_hist-out.txt"
+peak_file <- "data/asw_peaks.txt"
+
+peaks <- fread(paste("grep '^[^#]'", peak_file))
+
+hist_files <- c(Raw = hist_before_file, Normalised = hist_after_file)
+hist_data_list <- lapply(hist_files, fread)
+combined_data <- rbindlist(hist_data_list, idcol = "type")
+
+# arrange plot
+combined_data[, type := factor(type, levels = c("Normalised", "Raw"))]
+
+# hlines
+mincov <- peaks[2, V1]
+p1 <- peaks[2, V2]
+maxcov <- peaks[2, V3]
+peak_pd <- combined_data[type == "Raw" & between(`#Depth`, mincov, maxcov)]
+
+# plot title
+# gt <- paste0(
+#     p1, "× 31-mer coverage. ",
+#     "Main peak: ", mincov, "×–", maxcov, "×"
+# )
+
+# plot
+vd <- viridisLite::viridis(3)
+line_col <- vd[[1]]
+peak_col <- alpha(vd[[2]], 0.5)
+ggplot(combined_data,
+       aes(x = `#Depth`,
+           y = Unique_Kmers,
+           colour = type)) +
+    theme(legend.position = c(1, 1),
+          legend.key.size = unit(1, "lines"),
+          legend.justification = c(1,1),
+          legend.background = element_blank(),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    geom_path(alpha = 0.75) +
+    geom_ribbon(data = peak_pd,
+                mapping = aes(ymin = 0,
+                              ymax = Unique_Kmers,
+                              x = `#Depth`), colour = NA, fill = peak_col,
+                show.legend = FALSE) +
+    scale_color_viridis_d(guide = guide_legend(title = NULL)) +
+    scale_y_continuous(
+        trans = "log10",
+        labels = trans_format("log10", math_format(10^.x)),
+        breaks = trans_breaks("log10", function(x) 10^x)) +
+    scale_x_continuous(trans = log_trans(base = 4),
+                       breaks = trans_breaks(function(x) log(x, 4),
+                                             function(x) 4^x)) +
+    xlab("31-mer depth") + ylab("Number of unique 31-mers")
+```
+
+\endcol
+\begincol{0.4\textwidth}
+
+```{r kha_plot, fig.width = fw * 0.4}
+
+CalculateKhaStats <- function(x) {
+    setkey(x, `#Depth`)
+    x <- x[!last(x)]
+    x[, cum_sum := cumsum(as.numeric(Raw_Count))]
+    x[, percent_kmers := 100 * cum_sum / sum(Raw_Count)]
+    return(x)
+}
+
+kha_data_list <- lapply(hist_data_list, CalculateKhaStats)
+kha <- rbindlist(kha_data_list, idcol = "type")
+
+
+kha_plot <- ggplot(kha, aes(x = `#Depth`, y = percent_kmers, colour = type)) +
+    theme(legend.justification = c(1,0),
+          legend.position = c(1, 0),
+          legend.key.size = unit(1, "lines"),
+          legend.background = element_blank(),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    scale_color_viridis_d(guide = guide_legend(title = NULL)) +
+    xlab("Depth") + ylab("Cumulative read 31-mers (%)") +
+    ylim(c(0, 100)) +
+    scale_x_continuous(trans = log_trans(base = 4),
+                       breaks = trans_breaks(function(x) log(x, 4),
+                                             function(x) 4^x)) +
+    geom_path(alpha = 0.75)
+
+
+# find the elbows
+kha_diff <- kha[`#Depth` <= 256,
+                .(diff_pct = diff(diff(Raw_Count) > 0) != 0,
+                  `#Depth` = `#Depth`[c(-1, -2)],
+                  percent_kmers = percent_kmers[c(-1, -2)]),
+                by = type]
+
+kha_diff[, percent_repeat :=
+             paste0("~", round(100 - percent_kmers, 0), "% repeats")]
+
+kha_plot +
+    geom_hline(data = kha_diff[diff_pct == TRUE][c(5, 21)],
+               mapping = aes(yintercept = percent_kmers,
+                             colour = type),
+               linetype = 2,
+               show.legend = FALSE) +
+    geom_text(data = kha_diff[diff_pct == TRUE][c(5, 21)],
+              mapping = aes(label = percent_repeat,
+                            x = 0),
+              hjust = "left",
+              vjust = -0.1,
+              size = 2,
+              show.legend = FALSE)
+
+```
+\endcol
+\endcols
+# Nanopore genome
+
+# Nanopore genome
+
+![](img/screenshot-www.ncbi.nlm.nih.gov-2020.09.15-15_27_28.png){height=70mm}
+
+\source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
+}
+
+\note{\begin{itemize}
+\item The genome is now on NCBI
+\end{itemize}}
+
+
+# `r gt`
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r popgen1, fig.width = fw * 0.5}
+print(nz_map)
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r popgen2, fig.width = fw * 0.5}
+# run the pca
+pca <- glPca(snps_imputed, nf = Inf)
+pct_var <- 100 * (pca$eig^2)/(sum(pca$eig^2))
+
+# generate pca plot data
+pca_dt <- data.table(pca$scores, keep.rownames = TRUE)
+setnames(pca_dt, "rn", "individual")
+pca_dt[, population := gsub("^[[:alpha:]]+_([[:alpha:]]+).*", "\\1", individual)]
+pca_dt[, population := factor(
+    plyr::revalue(as.character(population), pop_order),
+    levels = pop_order)]
+
+ggplot(pca_dt, aes(x = PC1, y = PC2, colour = population)) +
+    coord_fixed() +
+    scale_colour_viridis_d(direction = -1,
+                           guide = FALSE) +
+    xlab(paste0("PC1 (", round(pct_var[[1]], 1), "%)")) + 
+    ylab(paste0("PC2 (", round(pct_var[[2]], 1), "%)")) + 
+    geom_point(alpha = 0.8, shape = 16)
+```
+
+\endcol
+\endcols
+
+# Demographic modelling
+
+# Genetic differentiation between parasitised an unparasitised weevils
+
+# Mention RNAseq here?
+
+# Wasp biology
+
+# Wasp geographic survey
+

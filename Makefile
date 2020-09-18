@@ -1,4 +1,4 @@
-cruft := notes.pdf slides.pdf slides.nav slides.log slides.aux slides.toc slides.snm
+cruft := notes.pdf slides.pdf slides.nav slides.log slides.aux slides.toc slides.snm tmp.utf8.md
 cache_directories := slides_cache slides_files
 
 all: slides.pdf notes.pdf
@@ -11,14 +11,7 @@ endif
 clean_cache:
 	$(RM) -rf $(cache_directories)
 
-
-
-
-
-slides.pdf: slides.Rmd style/header.tex style/body.tex style/footer.tex
-	# render the rmd to md using knitr
-	cat style/slides.yaml slides.Rmd > tmp.Rmd
-	R -e "rmarkdown::render('tmp.Rmd',clean=FALSE,run_pandoc=FALSE)" ;
+slides.pdf: tmp.utf8.md style/header.tex style/body.tex style/footer.tex
 	# run pandoc to generate beamer tex
 	/usr/bin/env pandoc \
 		+RTS -K512m \
@@ -39,13 +32,9 @@ slides.pdf: slides.Rmd style/header.tex style/body.tex style/footer.tex
 	pdflatex slides.tex ;
 	# remove cruft
 	rm \
-		slides.nav slides.log slides.aux slides.toc slides.snm slides.tex \
-		tmp.knit.md tmp.Rmd tmp.utf8.md
+		slides.nav slides.log slides.aux slides.toc slides.snm slides.tex
 	
-notes.pdf: slides.Rmd style/header.tex style/body.tex style/footer.tex
-	# render the rmd to md using knitr
-	cat style/notes.yaml slides.Rmd > tmp.Rmd
-	R -e "rmarkdown::render('tmp.Rmd',clean=FALSE,run_pandoc=FALSE)" ;
+notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/footer.tex	
 	# run pandoc to generate beamer tex
 	/usr/bin/env pandoc \
 		+RTS -K512m \
@@ -66,10 +55,9 @@ notes.pdf: slides.Rmd style/header.tex style/body.tex style/footer.tex
 	pdflatex notes.tex ;
 	# remove cruft
 	rm \
-		notes.nav notes.log notes.aux notes.toc notes.snm notes.tex \
-		tmp.knit.md tmp.Rmd tmp.utf8.md
+		notes.nav notes.log notes.aux notes.toc notes.snm notes.tex
 
-
-tmp.utf8.md: slides.Rmd
+tmp.utf8.md: slides.Rmd style/beamer.yaml
 	cat style/beamer.yaml slides.Rmd > tmp.Rmd
-	R -e "rmarkdown::render('tmp.Rmd',clean=FALSE,run_pandoc=FALSE)" ;
+	R -e "rmarkdown::render('tmp.Rmd',clean=FALSE,run_pandoc=FALSE)"
+	rm tmp.Rmd tmp.knit.md
