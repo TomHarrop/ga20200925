@@ -1,5 +1,5 @@
 cruft := notes.pdf slides.pdf slides.nav slides.log slides.aux slides.toc slides.snm tmp.utf8.md
-cache_directories := slides_cache slides_files
+cache_directories := tmp_cache tmp_files
 
 all: slides.pdf notes.pdf
 
@@ -32,8 +32,13 @@ slides.pdf: tmp.utf8.md style/header.tex style/body.tex style/footer.tex
 	pdflatex slides.tex ;
 	# remove cruft
 	rm \
-		slides.nav slides.log slides.aux slides.toc slides.snm slides.tex
-	
+		slides.aux \
+		slides.log \
+		slides.nav \
+		slides.snm \
+		slides.toc
+# 		slides.tex \
+
 notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/footer.tex	
 	# run pandoc to generate beamer tex
 	/usr/bin/env pandoc \
@@ -55,7 +60,13 @@ notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/foo
 	pdflatex notes.tex ;
 	# remove cruft
 	rm \
-		notes.nav notes.log notes.aux notes.toc notes.snm notes.tex
+		notes.aux \
+		notes.log \
+		notes.nav \
+		notes.snm \
+		notes.toc 
+# 		notes.tex \
+
 
 tmp.utf8.md: slides.Rmd style/beamer.yaml
 	cat style/beamer.yaml slides.Rmd > tmp.Rmd

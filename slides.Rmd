@@ -90,6 +90,71 @@ gt <- paste0(length(unique(snps_imputed$ind.names)),
              format(snps_imputed$n.loc, big.mark = ","),
              " loci")
 
+xv <- xvalDapc(tab(snps_imputed),
+               pop(snps_imputed),
+               n.pca.max = 20,
+               training.set = 0.9,
+               result = "groupMean",
+               center = TRUE,
+               scale = FALSE, 
+               n.pca = 1:20,
+               n.rep  = 5,
+               xval.plot = TRUE)
+
+xv_npca <- which.min(xv$`Root Mean Squared Error by Number of PCs of PCA`)
+
+# run the dapc
+dapc_results <- dapc(snps_imputed,
+                     n.pca = xv_npca,
+                     n.da = length(pop_order) - 1)
+
+dapc_var <- 100 * (dapc_results$eig^2)/(sum(dapc_results$eig^2))
+
+# fst data
+summary_file <- "data/populations.sumstats_summary.tsv" 
+hetran <- fread(summary_file)[, range(Exp_Het)]
+
+fst_file <- "data/populations.fst_summary.tsv"
+
+fst_mat_dt <- fread(fst_file)
+
+pairwise_fst <- melt(fst_mat_dt,
+                     id.vars = "V1",
+                     measure.vars = names(fst_mat_dt)[names(fst_mat_dt) != "V1"],
+                     variable.name = "pop2",
+                     value.name = "Fst")
+
+# fill missing values
+setnames(pairwise_fst, "V1", "pop1")
+pairwise_fst[pop1 == "MararoaDowns", pop1 := "Mararoa"]
+pairwise_fst[pop2 == "MararoaDowns", pop2 := "Mararoa"]
+
+filled_fst <- rbind(pairwise_fst[!is.na(Fst)],
+                    pairwise_fst[!is.na(Fst),
+                                 .(pop1 = pop2, pop2 = pop1, Fst = Fst)])
+
+all_pop <- pairwise_fst[, unique(c(pop1, as.character(pop2)))]
+fst_pd <- rbind(filled_fst,
+                data.table(pop1 = all_pop,pop2=all_pop, Fst = 0))
+
+# get population order
+fst_mat <- as.matrix(data.frame(dcast(fst_pd, pop1 ~ pop2), row.names = "pop1"))
+hc <- hclust(as.dist(fst_mat), method = "ward.D2")
+clust_order <- plyr::revalue(hc$labels[hc$order], pop_order)
+
+fst_pd[, pop1 := factor(plyr::revalue(pop1, pop_order),
+                        levels = clust_order)]
+fst_pd[, pop2 := factor(plyr::revalue(pop2, pop_order),
+                        levels = clust_order)]
+
+# set up label colours
+my_cols <- structure(rev(viridisLite::viridis(length(pop_order))),
+                     names = pop_order)
+lab_cols <- plyr::revalue(clust_order, my_cols)
+
+# draw the plot
+fill_cols <- RColorBrewer::brewer.pal(7, "YlOrRd")
+
 ```
 
 ```{r nz_map, include=FALSE, results="hide"}
@@ -234,7 +299,7 @@ ggplot(combined_data,
     scale_x_continuous(trans = log_trans(base = 4),
                        breaks = trans_breaks(function(x) log(x, 4),
                                              function(x) 4^x)) +
-    xlab("31-mer depth") + ylab("Number of unique 31-mers")
+    xlab("Depth") + ylab("Number of unique 31-mers")
 ```
 
 \endcol
@@ -296,6 +361,9 @@ kha_plot +
 ```
 \endcol
 \endcols
+
+# Pivot to insect genomics?
+
 # Nanopore genome
 
 # Nanopore genome
@@ -309,6 +377,8 @@ kha_plot +
 \item The genome is now on NCBI
 \end{itemize}}
 
+
+# Mapping stats for NP genome
 
 # `r gt`
 
@@ -347,6 +417,177 @@ ggplot(pca_dt, aes(x = PC1, y = PC2, colour = population)) +
 \endcol
 \endcols
 
+# DAPC of PCs 1--`r xv_npca`
+
+```{r popgen4}
+# generate dapc plot data
+dapc_dt <- data.table(dapc_results$ind.coord, keep.rownames = TRUE)
+setnames(dapc_dt, "rn", "individual")
+dapc_long <- melt(dapc_dt,
+                  id.vars = "individual",
+                  variable.name = "component",
+                  value.name = "score")
+dapc_long[, population := gsub("^[[:alpha:]]+_([[:alpha:]]+).*", "\\1", individual)]
+dapc_long[, population := factor(plyr::revalue(as.character(population), pop_order),
+                                 levels = pop_order)]
+
+dapc_pd <- merge(dapc_long,
+                 data.table(component = paste0("LD", 1:length(dapc_var)),
+                            dapc_var = dapc_var),
+                 all.y = FALSE)
+# dapc_pd[, population := factor(population, levels = pop_order)]
+dapc_pd[, facet_label := paste0(component, " (", round(dapc_var, 1), "%)")]
+
+# plot the dapc
+ggplot(dapc_pd[dapc_var > 1],
+       aes(x = population, y = score, colour = population)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+          panel.border = element_rect(fill = NA, colour = "black"),
+          strip.placement = "outside",
+          strip.background = element_blank()) +
+    xlab(NULL) + ylab(NULL) +
+    ylim(c(-6, 6)) +
+    facet_wrap(~facet_label,
+               strip.position = "left",
+               scales = "free") +
+    scale_colour_viridis_d(direction = -1,
+                           guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+```
+# Assigned population
+
+```{r dapc_post}
+
+# posteriors
+dapc_post_wide <- data.table(dapc_results$posterior, keep.rownames = TRUE)
+dapc_post <- melt(dapc_post_wide, id.vars = "rn", variable.name = "pop", value.name = "prob")
+dapc_post[, sample_pop := gsub("geo_([[:alpha:]]+).*", "\\1", rn)]
+
+dapc_post[, pop := factor(plyr::revalue(as.character(pop), pop_order),
+                          levels = rev(pop_order))]
+dapc_post[, sample_pop := factor(plyr::revalue(as.character(sample_pop), pop_order),
+                                 levels = pop_order)]
+
+actual_pop <- dapc_post[pop == sample_pop]
+setorder(actual_pop, -prob)
+indiv_order <- actual_pop[, rn]
+
+dapc_post[, rn := factor(rn, levels = unique(indiv_order))]
+
+dp <- ggplot(dapc_post, aes(x = rn, y = prob, fill = pop)) +
+    theme_minimal() +
+    theme(
+        # text = element_text(debug = TRUE),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 4.5),
+        strip.text = element_text(size = 4.5),
+        strip.background = element_blank(),
+        legend.key.size = unit(0.8, "lines"),
+        legend.position = "top",
+        panel.background = element_blank(),
+        panel.spacing = unit(1/10, "lines")) +
+    xlab("Sample population") + ylab("Membership probability") +
+    facet_grid(~ sample_pop,
+               scales = "free_x",
+               space = "free_x",
+               switch = "x", ) +
+    scale_y_continuous(expand = c(0, 0)) +
+    scale_fill_viridis_d(
+        direction = 1,
+        guide = guide_legend(title = NULL,
+                             title.position = "top",
+                             reverse = TRUE)) +
+    geom_col()
+
+gb <- ggplot_build(dp)
+gt <- ggplot_gtable(gb)
+gt$layout$clip <- "off"
+grid::grid.draw(gt)
+
+```
+
+# High heterozygosity (`r sprintf('%.02f', hetran[[1]])`--`r sprintf('%.02f', hetran[[2]])`), low structure
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r popgen7, fig.width = fw * 0.5}
+print(nz_map)
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r pairwise_fst, fig.width = fw * 0.5}
+ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
+    theme_minimal(base_size = 8 ) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     vjust = 0.5,
+                                     colour = lab_cols),
+          axis.text.y = element_text(colour = rev(lab_cols)),
+          legend.key.size = unit(0.8, "lines")) +
+    xlab(NULL) + ylab(NULL) +
+    scale_x_discrete(expand = c(0, 0)) +
+    # scale_y_discrete(expand = c(0, 0)) +
+    scale_y_discrete(limits = rev(levels(fst_pd$pop2)),
+                     expand = c(0, 0)) +
+    scale_fill_gradientn(
+        colours = fill_cols,
+        guide = guide_colorbar(
+            title = expression(italic("F")["ST"]))) +
+    geom_raster()
+
+```
+
+\endcol
+\endcols
+
+# Main divide separates ASW populations
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r popgen5, fig.width = fw * 0.5}
+print(nz_map)
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r popgen6, fig.width = fw * 0.5}
+ggplot(dapc_pd[component == "LD1"],
+       aes(x = population, y = score, colour = population)) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+          panel.border = element_rect(fill = NA, colour = "black"),
+          strip.placement = "outside",
+          strip.background = element_blank()) +
+    xlab(NULL) + ylab(NULL) +
+    ylim(c(-6, 6)) +
+    facet_wrap(~facet_label,
+               strip.position = "left",
+               scales = "free") +
+    scale_colour_viridis_d(direction = -1,
+                           guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+
+```
+
+\endcol
+\endcols
+
 # Demographic modelling
 
 # Genetic differentiation between parasitised an unparasitised weevils
@@ -355,5 +596,20 @@ ggplot(pca_dt, aes(x = PC1, y = PC2, colour = population)) +
 
 # Wasp biology
 
-# Wasp geographic survey
+# Parasitoid genomes
+
+![](/home/tom/Projects/microctonus-compare/wga/030_wga/wga.pdf)
+
+\source{John Skelly}
+
+# Genetic diversity in the parasitoid?
+
+\source{Ciar\'{a}n Cuddy}
+
+# Ppl to thank
+
+- Goldson, Malvika, Lokesh
+- Weevil dissectors
+- 
+
 
