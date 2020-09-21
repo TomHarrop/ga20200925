@@ -535,9 +535,9 @@ ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
           legend.key.size = unit(0.8, "lines")) +
     xlab(NULL) + ylab(NULL) +
     scale_x_discrete(expand = c(0, 0)) +
-    # scale_y_discrete(expand = c(0, 0)) +
-    scale_y_discrete(limits = rev(levels(fst_pd$pop2)),
-                     expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0)) +
+    # scale_y_discrete(limits = rev(levels(fst_pd$pop2)),
+    #                  expand = c(0, 0)) +
     scale_fill_gradientn(
         colours = fill_cols,
         guide = guide_colorbar(
