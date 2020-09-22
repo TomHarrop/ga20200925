@@ -69,6 +69,7 @@ pop_order <- c(
     "Fortrose" = "Fortrose")
 
 vcf_file <- "data/populations.geo.pruned.vcf"
+fai_file <- "data/ref.fasta.fai"
 ```
 
 ```{r data_proc, include=FALSE, results="hide"}
@@ -155,6 +156,21 @@ lab_cols <- plyr::revalue(clust_order, my_cols)
 # draw the plot
 fill_cols <- RColorBrewer::brewer.pal(7, "YlOrRd")
 
+
+# fai
+fai <- fread(fai_file)
+
+# number of loci per chr
+para_file <- "data/populations.rlpara.pruned.vcf"
+para_vcf <- fread(cmd = paste("grep -v '^##'", para_file))
+
+n_per_chrom <- merge(para_vcf[, .(`SNPs per contig` = .N),
+                              by = `#CHROM`],
+                     fai[, .(`#CHROM` = V1,
+                             length = V2)])
+
+n_per_chrom[, `SNP frequency` := `SNPs per contig` / length]
+med_freq <- n_per_chrom[, median(`SNP frequency`)]
 ```
 
 ```{r nz_map, include=FALSE, results="hide"}
@@ -362,7 +378,12 @@ kha_plot +
 \endcol
 \endcols
 
-# Pivot to insect genomics?
+# Pivot to insect genomics
+
+<!-- \emojiFont{Some text ☺} -->
+
+
+
 
 # Nanopore genome
 
@@ -379,6 +400,63 @@ kha_plot +
 
 
 # Mapping stats for NP genome
+
+# GBS data processing
+
+# `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r frac_discarded, fig.width = fw * 0.5}
+geo_only <- readRDS("data/frac_discarded.geo.Rds")
+geo_only[, pop2 := factor(pop, levels = rev(pop_order))]
+# plot
+ggplot(geo_only[!is.na(pop2)],
+       aes(x = pop2,
+           y = frac_discarded * 100,
+           colour = pop2)) +
+    coord_flip() +
+    xlab(NULL) + ylab("Bases discarded (%)") +
+    scale_colour_viridis_d(guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r mean_dp, fig.width = fw * 0.5}
+mean_dp <- readRDS("data/mean_dp.Rds")
+ggplot(mean_dp[!is.na(pop2)],
+       aes(x = pop2,
+           y = mean_dp,
+           colour = pop2)) +
+    coord_flip() +
+    xlab(NULL) + ylab("Mean depth across loci") +
+    scale_colour_viridis_d(guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+
+```
+
+\note{
+- need stuff about the adaptor trimming strategy here
+- number of loci, coverage per locus
+}
+
+\endcol
+\endcols
 
 # `r gt`
 
@@ -531,7 +609,7 @@ ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
                                      hjust = 1,
                                      vjust = 0.5,
                                      colour = lab_cols),
-          axis.text.y = element_text(colour = rev(lab_cols)),
+          axis.text.y = element_text(colour = lab_cols),
           legend.key.size = unit(0.8, "lines")) +
     xlab(NULL) + ylab(NULL) +
     scale_x_discrete(expand = c(0, 0)) +
@@ -591,6 +669,43 @@ ggplot(dapc_pd[component == "LD1"],
 # Demographic modelling
 
 # Genetic differentiation between parasitised an unparasitised weevils
+
+\source{Marissa Le Lec}
+
+# One SNP every `r format(round(1/med_freq, 0), big.mark = ",")` bp
+
+\begincols[c]
+\begincol{0.4\textwidth}
+
+```{r snp_per_contig, fig.width = fw * 0.4}
+ggplot(n_per_chrom, aes(x = `SNPs per contig`)) +
+    ylab("Contigs") +
+    scale_x_continuous(breaks= pretty_breaks()) +
+    geom_histogram(binwidth = 1)
+```
+
+\endcol
+\begincol{0.6\textwidth}
+
+```{r snp_freq, fig.width = fw * 0.6}
+ggplot(n_per_chrom[`SNPs per contig` > 1],
+       aes(x = `SNP frequency`)) +
+    ylab("Contigs") + xlab("Mean SNP frequency") +
+    scale_x_continuous(
+        trans = "log10",
+        labels = trans_format("log10", math_format(10^.x)),
+        breaks = trans_breaks("log10", function(x) 10^x)) +
+    geom_histogram(bins = 100)
+```
+
+\endcol
+\endcols
+
+\note{
+One every 38 kb is median for the rlpara dataset
+}
+
+\source{Marissa Le Lec}
 
 # Mention RNAseq here?
 

@@ -30,14 +30,15 @@ slides.pdf: tmp.utf8.md style/header.tex style/body.tex style/footer.tex
 	# run pdflatex twice to get the transparency right
 	pdflatex slides.tex ;
 	pdflatex slides.tex ;
+	# xelatex slides.tex
 	# remove cruft
 	rm \
 		slides.aux \
 		slides.log \
 		slides.nav \
 		slides.snm \
-		slides.toc
-# 		slides.tex \
+		slides.toc \
+		slides.tex
 
 notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/footer.tex	
 	# run pandoc to generate beamer tex
@@ -64,8 +65,8 @@ notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/foo
 		notes.log \
 		notes.nav \
 		notes.snm \
-		notes.toc 
-# 		notes.tex \
+		notes.toc \
+ 		notes.tex
 
 
 tmp.utf8.md: slides.Rmd style/beamer.yaml

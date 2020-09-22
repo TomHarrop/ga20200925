@@ -13,9 +13,17 @@ The University of Otago
 
 % Enable lato (installed on unix with `tlmgr install lato`)
 \usepackage[defaultsans]{lato}
-% \usepackage[utf8]{inputenc}
-% \usepackage{coloremoji}
+\usepackage[utf8]{inputenc}
 % \usepackage{lmodern}
+
+% Define emojis?
+% \DeclareUnicodeCharacter {1F55A} {\clockTen}
+% \protected\def \clockTen {<<Clock Ten, U+1F55A>>}
+% \usepackage{fontspec}
+% \setmainfont{Symbola}
+% \newfontface\emojiFont{"Noto Color Emoji"}[Renderer=Harfbuzz]
+% \catcode `\🕚=\active
+% \protected\def 🕚{\leavevmode{\emojiFont 🕚}}
 
 % Enable citations in footnotes
 \usepackage{calc}
