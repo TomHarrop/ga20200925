@@ -2,9 +2,12 @@
 ```{r setup, include=FALSE, results="hide"}
 library(adegenet)
 library(bit64)
+library(cowplot)
 library(data.table)
 library(ggmap)
 library(ggplot2)
+library(magick)
+library(pander)
 library(scales)
 library(vcfR)
 
@@ -382,10 +385,23 @@ kha_plot +
 
 <!-- \emojiFont{Some text ☺} -->
 
+# Iterative improvements to the genome
 
+```{r genome_table, results="asis", cache=FALSE}
+genome_table <- fread("data/genome_table.csv", header = TRUE)
 
+setnames(genome_table, names(genome_table)[[1]], "rn")
+x <- data.frame(genome_table, row.names = "rn")
+panderOptions("keep.line.breaks", TRUE)
+pandoc.table(x,
+             col.names = names(genome_table)[2:length(names(genome_table))],
+             # style = "rmarkdown", 
+             style = "multiline",
+             split.tables = Inf)
+```
 
-# Nanopore genome
+\source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
+}
 
 # Nanopore genome
 
@@ -402,8 +418,6 @@ kha_plot +
 # Mapping stats for NP genome
 
 # GBS data processing
-
-# `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -427,6 +441,85 @@ ggplot(geo_only[!is.na(pop2)],
                alpha = 0.8,
                position = position_jitter(width = 0.2))
 ```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r flagstats, fig.width = fw * 0.5}
+
+flagstats <- readRDS("data/flagstats.Rds")
+ggplot(flagstats[!is.na(pop2)][
+    category == "mapped %"],
+    aes(x = pop2,
+        y = qc_pass,
+        colour = pop2)) +
+    coord_flip() +
+    xlab(NULL) + ylab("Mapped (%)") +
+    scale_colour_viridis_d(guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+
+```
+
+\endcol
+\endcols
+
+\note{
+1-1.5 million reads per individual
+}
+
+
+# `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
+
+```{r filter_map}
+
+geo_only <- readRDS("data/frac_discarded.geo.Rds")
+geo_only[, pop2 := factor(pop, levels = rev(pop_order))]
+flagstats <- readRDS("data/flagstats.Rds")
+mean_dp <- readRDS("data/mean_dp.Rds")
+
+pd1 <- rbind(geo_only[!is.na(pop2),
+                      .(pop2,
+                        indiv = individual,
+                        value = frac_discarded *100,
+                        variable = "Bases discarded (%)")],
+             flagstats[!is.na(pop2) & category == "mapped %",
+                       .(pop2, indiv, value = qc_pass, variable = "Mapped (%)")])
+
+pd <- rbind(pd1,
+            mean_dp[!is.na(pop2), .(
+                pop2, indiv, value = mean_dp, variable = "Mean depth across loci"
+            )])
+
+ggplot(pd, aes(x = pop2, y = value, col = pop2)) +
+    facet_wrap(~variable,
+               scales = "free_x",
+               strip.position = "bottom") +
+    theme(strip.placement = "outside",
+          strip.background = element_blank()) +
+    coord_flip() +
+    xlab(NULL) +
+    ylab(NULL) +
+    scale_colour_viridis_d(guide = FALSE) +
+    geom_boxplot(fill = NA,
+                 colour = alpha("black", 0.5),
+                 outlier.colour = NA,
+                 width = 0.5) +
+    geom_point(shape = 16,
+               alpha = 0.8,
+               position = position_jitter(width = 0.2))
+```
+
+# `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
 
 \endcol
 \begincol{0.5\textwidth}
@@ -667,6 +760,74 @@ ggplot(dapc_pd[component == "LD1"],
 \endcols
 
 # Demographic modelling
+
+```{r fsc}
+
+
+# model 0: iv, model 1: i, model 2: iii, model 3: ii, model 4: v
+model_map <- c(
+    model1 =   "i",
+    model3 =  "ii",
+    model2 = "iii",
+    model0 =  "iv",
+    model4 =   "v")
+
+# asw-stacks-singleplate/output/095_fastsimcoal/ns.pruned/summary.csv
+model_file <- "data/summary.csv"
+model_diagram <- image_read_pdf("data/models_fig_170ns.pdf")
+
+# set up labels
+model_data <- fread(model_file)
+model_data[, plot_model := factor(plyr::revalue(model, model_map),
+                                  levels = model_map)]
+model_data[mig == "mig", mig := "With migration"]
+model_data[mig == "no_mig", mig := "Without migration"]
+
+# deal with inf
+max_lhood <- model_data[is.finite(Lhood), max(Lhood)]
+model_data[, is_inf := is.infinite(Lhood)]
+model_data[is_inf == TRUE, Lhood := max_lhood]
+
+# summary table?
+model_summary <- model_data[, data.table(t(summary(Lhood))), by = .(plot_model, mig)]
+# model_summary[V2 == "Mean"]
+
+lhood_plot <- ggplot(model_data[is_inf == FALSE],
+                     aes(x = plot_model,
+                         y = Lhood,
+                         colour = mig)) +
+    theme_grey(base_size = 10) +
+    theme(legend.key.size = unit(0.8, "lines")) +
+    scale_color_viridis_d(
+        guide = guide_legend(title = NULL,
+                             override.aes = list(shape = 16, alpha = 1))) +
+    xlab(NULL) + ylab("Delta likelihood") +
+    geom_point(position = position_jitterdodge(jitter.width = 0.25),
+               alpha = 0.5,
+               size = 1,
+               shape = 16) +
+    geom_point(data = model_data[is_inf == TRUE],
+               position = position_jitterdodge(jitter.width = 0.25),
+               alpha = 0.5,
+               size = 1,
+               shape = 8)
+
+
+plot_grid(ggdraw() + draw_image(model_diagram),
+          lhood_plot,
+          align = "h",
+          axis = "l",
+          ncol = 1)
+
+```
+
+\source{Marissa Le Lec}
+
+\note{
+\start{itemize}
+\item Why are the models so weird? Look at diagnostic plot.
+\stop{itemize}
+}
 
 # Genetic differentiation between parasitised an unparasitised weevils
 
