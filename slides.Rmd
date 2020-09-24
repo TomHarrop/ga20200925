@@ -504,7 +504,7 @@ pandoc.table(x,
 
 # Nanopore genome
 
-<!-- ![](img/screenshot-www.ncbi.nlm.nih.gov-2020.09.15-15_27_28.png){height=70mm} -->
+![](img/screenshot-www.ncbi.nlm.nih.gov-2020.09.15-15_27_28.png){height=70mm}
 
 \source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
 }
