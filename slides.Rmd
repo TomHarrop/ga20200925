@@ -229,15 +229,35 @@ nz_map <- ggmap(nz_sm) +
 
 ![](img/Paddock28_21.2.17.jpg){height=75mm}
 
+\note{\begin{itemize}
+\item importance of pasture to NZ
+\item history of ASW in NZ
+\item cost of argentine stem weevil damage
+\end{itemize}}
+
 # Biology of weevils
 
-
+\note{\begin{itemize}
+\item How ASW damages pasture
+\end{itemize}}
 
 # Can't be controlled by insecticides
 
 ![](img/Argentine-stem-weevil-larvae-in-ryegrass-stem2.jpg){height=70mm}
 
 \source{\href{http://agpest.co.nz/?pesttypes=argentine-stem-weevil-larvae}{AgPest}}
+
+\note{\begin{itemize}
+\item stem borer, insecticide doesn't have access
+\item history of ASW in NZ
+\item cost of argentine stem weevil damage
+\end{itemize}}
+
+# Introduce biocontrol
+
+\note{\begin{itemize}
+\item relies on co-evolution to maintain effectiveness
+\end{itemize}}
 
 # Control by *M. hyp*
 
@@ -381,7 +401,14 @@ kha_plot +
 \endcol
 \endcols
 
-# Pivot to insect genomics
+<!-- # Pivot to insect genomics \scalerel{\includegraphics{img/backhand-index-pointing-down_medium-skin-tone_1f447-1f3fd_1f3fd.png}}{X} -->
+
+
+# \emoji1{} Check out these genomes
+
+Does it work in normal \emoji1{} text?
+
+<!-- # Pivot to insect genomics  -->
 
 <!-- \emojiFont{Some text ☺} -->
 
@@ -403,9 +430,15 @@ pandoc.table(x,
 \source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
 }
 
+\note{\begin{itemize}
+\item RNAseq mapping - 75%
+\item long reads - 99.88 %
+\item short reads - 94.71 %
+\end{itemize}}
+
 # Nanopore genome
 
-![](img/screenshot-www.ncbi.nlm.nih.gov-2020.09.15-15_27_28.png){height=70mm}
+<!-- ![](img/screenshot-www.ncbi.nlm.nih.gov-2020.09.15-15_27_28.png){height=70mm} -->
 
 \source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
 }
@@ -413,9 +446,6 @@ pandoc.table(x,
 \note{\begin{itemize}
 \item The genome is now on NCBI
 \end{itemize}}
-
-
-# Mapping stats for NP genome
 
 # GBS data processing
 
@@ -824,9 +854,9 @@ plot_grid(ggdraw() + draw_image(model_diagram),
 \source{Marissa Le Lec}
 
 \note{
-\start{itemize}
+\begin{itemize}
 \item Why are the models so weird? Look at diagnostic plot.
-\stop{itemize}
+\end{itemize}
 }
 
 # Genetic differentiation between parasitised an unparasitised weevils
@@ -881,6 +911,12 @@ One every 38 kb is median for the rlpara dataset
 # Genetic diversity in the parasitoid?
 
 \source{Ciar\'{a}n Cuddy}
+
+\note{\begin{itemize}
+\item note implications for monitoring biocontrol
+\item maybe compare to \emph{M. aethiopoides}
+\end{itemize}}
+
 
 # Ppl to thank
 

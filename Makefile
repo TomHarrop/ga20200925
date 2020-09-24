@@ -38,7 +38,7 @@ slides.pdf: tmp.utf8.md style/header.tex style/body.tex style/footer.tex
 		slides.nav \
 		slides.snm \
 		slides.toc \
-		slides.tex
+		# slides.tex
 
 notes.pdf: tmp.utf8.md style/notes.tex style/header.tex style/body.tex style/footer.tex	
 	# run pandoc to generate beamer tex
