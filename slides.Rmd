@@ -92,7 +92,7 @@ pop(snps_imputed) <- factor(pops, levels = names(pop_order))
 gt <- paste0(length(unique(snps_imputed$ind.names)),
              " individuals genotyped at ", 
              format(snps_imputed$n.loc, big.mark = ","),
-             " loci")
+             " SNPs")
 
 xv <- xvalDapc(tab(snps_imputed),
                pop(snps_imputed),
@@ -225,20 +225,62 @@ nz_map <- ggmap(nz_sm) +
 
 ```
 
-# Pasture in NZ, damage by weevils
+# Biological control
 
-![](img/Paddock28_21.2.17.jpg){height=75mm}
+![](img/Young_Bufo_marinus.jpg){height=70mm}
+
+\source{Bidgee, \href{https://creativecommons.org/licenses/by/3.0}{CC BY}}
 
 \note{\begin{itemize}
+\item When you hear biocontrol, you think cane toad
+\item Native to south / central america, around 100 introduced into Australia in 1935 to control cane beetle
+\item Now over 200 million in Australia, disastrous impact on introduced ecosystem
+\end{itemize}}
+
+# Biological control
+
+![](img/Cotesia9061.8.15.07.c.jpg){height=70mm}
+
+\source{Beatriz Moisset, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA}}
+
+\note{\begin{itemize}
+\item start here - introduce coevolution
+\item relies on co-evolution to maintain effectiveness
+\item find a good example of successful biocontrol
+\item mention that no examples of evolution of resistance
+\end{itemize}}
+
+
+# Argentine stem weevil, *Listronotus bonariensis*
+
+\includegraphics[width=70mm,angle=90]{img/Listronotus_bonariensis_dorsal.jpg}
+
+\source{Landcare Research New Zealand Ltd., \href{https://creativecommons.org/licenses/by/4.0}{CC BY}}
+
+\note{\begin{itemize}
+\item today's example is ...
+\end{itemize}}
+
+# Pasture in NZ, damage by weevils
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+![](img/Saxon_Rye_Clover_Plus_1024x1024.jpg){height=70mm}
+
+\endcol
+\begincol{0.5\textwidth}
+
+![](img/Paddock28_21.2.17.jpg){height=70mm}
+
+\endcol
+\endcols
+
+\note{\begin{itemize}
+\item it's interesting from the evo point of view but also agriculture
 \item importance of pasture to NZ
 \item history of ASW in NZ
 \item cost of argentine stem weevil damage
-\end{itemize}}
-
-# Biology of weevils
-
-\note{\begin{itemize}
-\item How ASW damages pasture
 \end{itemize}}
 
 # Can't be controlled by insecticides
@@ -248,39 +290,41 @@ nz_map <- ggmap(nz_sm) +
 \source{\href{http://agpest.co.nz/?pesttypes=argentine-stem-weevil-larvae}{AgPest}}
 
 \note{\begin{itemize}
+\item How ASW damages pasture
 \item stem borer, insecticide doesn't have access
 \item history of ASW in NZ
 \item cost of argentine stem weevil damage
 \end{itemize}}
 
-# Introduce biocontrol
-
-\note{\begin{itemize}
-\item relies on co-evolution to maintain effectiveness
-\end{itemize}}
-
-# Control by *M. hyp*
+# *Microctonus hyperodae*
 
 ![](img/1295012-PPT.jpg){height=70mm}
+\source{Mark McNeill, \href{https://creativecommons.org/licenses/by/3.0/us/}{CC-BY-3.0}.}
 
-\source{Braconid wasp \emph{Microctonus hyperodae} by Mark McNeill, \href{https://creativecommons.org/licenses/by/3.0/us/}{CC-BY-3.0}.}
+\note{\begin{itemize}
+\item Mention that ryegrass \emph{is} an introduced ecosystem
+\item Relative lacks of biota etc.
+\item mode of action of Mhyp
+\end{itemize}}
 
 # Decline in effectiveness
 
-# Introduce unequal arms race
+![](img/tomasetto_f1.jpg){width=0.75\textwidth}
 
-# Geographical survey
+\source{PNAS 114 (15): 3885–3890. \href{https://doi.org/10.1073/pnas.1618416114}{10.1073/pnas.1618416114}.
+}
 
-```{r geo_surv}
-print(nz_map)
-```
-\source{
-Map tiles by
-\href{http://stamen.com}{Stamen Design} under \href{http://creativecommons.org/licenses/by/3.0}{CC BY 3.0}, with data by \href{http://openstreetmap.org}{OpenStreetMap} under \href{http://www.openstreetmap.org/copyright}{ODbL}.}
+
+\note{\begin{itemize}
+\item Mention that ryegrass \emph{is} an introduced ecosystem
+\item Relative lacks of biota etc.
+\item stress that this is a genetic phenomenon
+\item we wanted to look at population genomics so we started by constructing a genome
+\end{itemize}}
 
 # Need for a genome
 
-# Illumina genome
+# Poor candidate for short-read genome
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -330,7 +374,8 @@ ggplot(combined_data,
                               ymax = Unique_Kmers,
                               x = `#Depth`), colour = NA, fill = peak_col,
                 show.legend = FALSE) +
-    scale_color_viridis_d(guide = guide_legend(title = NULL)) +
+    scale_color_viridis_d(guide = guide_legend(title = NULL),
+                          direction = -1) +
     scale_y_continuous(
         trans = "log10",
         labels = trans_format("log10", math_format(10^.x)),
@@ -364,7 +409,8 @@ kha_plot <- ggplot(kha, aes(x = `#Depth`, y = percent_kmers, colour = type)) +
           legend.key.size = unit(1, "lines"),
           legend.background = element_blank(),
           axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-    scale_color_viridis_d(guide = guide_legend(title = NULL)) +
+    scale_color_viridis_d(guide = guide_legend(title = NULL),
+                          direction = -1) +
     xlab("Depth") + ylab("Cumulative read 31-mers (%)") +
     ylim(c(0, 100)) +
     scale_x_continuous(trans = log_trans(base = 4),
@@ -401,16 +447,36 @@ kha_plot +
 \endcol
 \endcols
 
-<!-- # Pivot to insect genomics \scalerel{\includegraphics{img/backhand-index-pointing-down_medium-skin-tone_1f447-1f3fd_1f3fd.png}}{X} -->
+\note{\begin{itemize}
+\item started by attempting assembly from illumina reads
+\item green shaded area are the homozygous kmers
+\item earlier peak (lower depth but more kmers) are heterozygous kmers
+\item more kmers are at half depth than at full depth suggesting a highly heterozygous genome
+\item knee in kha plot: large proportion of kmers at higher-than-genome coverage, e.g. repeat regions
+\item small organism (can't get a lot of DNA from a single indiv)
+\item highly heterozygous (pooling not a great idea)
+\item don't breed in the lab (can't inbreed)
 
+\end{itemize}}
+
+# We started a genome project by mistake
+
+![](img/withnail.jpg){height=70mm}
+
+\note{\begin{itemize}
+\item embracing the sunk cost fallacy
+\end{itemize}}
 
 # \emoji1{} Check out these genomes
 
-Does it work in normal \emoji1{} text?
+![](img/genomes.pdf){height=70mm}
 
-<!-- # Pivot to insect genomics  -->
-
-<!-- \emojiFont{Some text ☺} -->
+\note{\begin{itemize}
+\item Vespula species - illumina + HiC.
+Really easy to assemble haploid material, you get chromosome-level assemblies
+\item stonefly. PacBio Hifi
+\item velvetworm, 12 GB genome, medium coverage nanopore (20x or so?) takes months to assemble, 
+\end{itemize}}
 
 # Iterative improvements to the genome
 
@@ -447,62 +513,14 @@ pandoc.table(x,
 \item The genome is now on NCBI
 \end{itemize}}
 
-# GBS data processing
+# Geographical survey
 
-\begincols[c]
-\begincol{0.5\textwidth}
-
-```{r frac_discarded, fig.width = fw * 0.5}
-geo_only <- readRDS("data/frac_discarded.geo.Rds")
-geo_only[, pop2 := factor(pop, levels = rev(pop_order))]
-# plot
-ggplot(geo_only[!is.na(pop2)],
-       aes(x = pop2,
-           y = frac_discarded * 100,
-           colour = pop2)) +
-    coord_flip() +
-    xlab(NULL) + ylab("Bases discarded (%)") +
-    scale_colour_viridis_d(guide = FALSE) +
-    geom_boxplot(fill = NA,
-                 colour = alpha("black", 0.5),
-                 outlier.colour = NA,
-                 width = 0.5) +
-    geom_point(shape = 16,
-               alpha = 0.8,
-               position = position_jitter(width = 0.2))
+```{r geo_surv}
+print(nz_map)
 ```
-
-\endcol
-\begincol{0.5\textwidth}
-
-```{r flagstats, fig.width = fw * 0.5}
-
-flagstats <- readRDS("data/flagstats.Rds")
-ggplot(flagstats[!is.na(pop2)][
-    category == "mapped %"],
-    aes(x = pop2,
-        y = qc_pass,
-        colour = pop2)) +
-    coord_flip() +
-    xlab(NULL) + ylab("Mapped (%)") +
-    scale_colour_viridis_d(guide = FALSE) +
-    geom_boxplot(fill = NA,
-                 colour = alpha("black", 0.5),
-                 outlier.colour = NA,
-                 width = 0.5) +
-    geom_point(shape = 16,
-               alpha = 0.8,
-               position = position_jitter(width = 0.2))
-
-```
-
-\endcol
-\endcols
-
-\note{
-1-1.5 million reads per individual
-}
-
+\source{
+Map tiles by
+\href{http://stamen.com}{Stamen Design} under \href{http://creativecommons.org/licenses/by/3.0}{CC BY 3.0}, with data by \href{http://openstreetmap.org}{OpenStreetMap} under \href{http://www.openstreetmap.org/copyright}{ODbL}.}
 
 # `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
 
@@ -545,41 +563,15 @@ ggplot(pd, aes(x = pop2, y = value, col = pop2)) +
                position = position_jitter(width = 0.2))
 ```
 
-# `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
 
-\begincols[c]
-\begincol{0.5\textwidth}
-
-
-\endcol
-\begincol{0.5\textwidth}
-
-```{r mean_dp, fig.width = fw * 0.5}
-mean_dp <- readRDS("data/mean_dp.Rds")
-ggplot(mean_dp[!is.na(pop2)],
-       aes(x = pop2,
-           y = mean_dp,
-           colour = pop2)) +
-    coord_flip() +
-    xlab(NULL) + ylab("Mean depth across loci") +
-    scale_colour_viridis_d(guide = FALSE) +
-    geom_boxplot(fill = NA,
-                 colour = alpha("black", 0.5),
-                 outlier.colour = NA,
-                 width = 0.5) +
-    geom_point(shape = 16,
-               alpha = 0.8,
-               position = position_jitter(width = 0.2))
-
-```
+\note{
+1-1.5 million reads per individual
+}
 
 \note{
 - need stuff about the adaptor trimming strategy here
 - number of loci, coverage per locus
 }
-
-\endcol
-\endcols
 
 # `r gt`
 
@@ -661,6 +653,7 @@ ggplot(dapc_pd[dapc_var > 1],
                alpha = 0.8,
                position = position_jitter(width = 0.2))
 ```
+
 # Assigned population
 
 ```{r dapc_post}
@@ -749,6 +742,18 @@ ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
 
 \endcol
 \endcols
+
+# Previous measures of genetic diversity
+
+- maybe a RAPD gel? or something random
+
+\note{\begin{itemize}
+\item molecular markers go here.
+\item "there is a high degreeof genetic similarity between populations throughoutthe country" (RAPD paper)
+\item "Only one haplotype of COI was found in all of the L. bonariensis specimens collected from eight sites throughout New Zealand" (COI sequencing)
+\end{itemize}}
+
+# Introduce unequal arms race
 
 # Main divide separates ASW populations
 
@@ -859,9 +864,100 @@ plot_grid(ggdraw() + draw_image(model_diagram),
 \end{itemize}
 }
 
-# Genetic differentiation between parasitised an unparasitised weevils
+# SNPs don't diff para
+
+
+```{r rlpara_prep, results = "hide"}
+para_info_file <- "data/para_sample_info.tsv"
+
+
+# get the info
+para_info <- fread(para_info_file)
+# mung to match
+para_info[, indiv_name := paste("para", Individual, sep = "_")]
+
+# read the vcf
+para <- read.vcfR(para_file)
+para_data <- vcfR2genlight(para)
+
+# impute NAs on mean
+para_means <- tab(para_data, NA.method = "mean")
+para_imputed <- new("genlight", para_means)
+ploidy(para_imputed) <- 2
+
+# add pop
+p_pops <- para_info[para_imputed$ind.names, pop_para, on = "indiv_name"] 
+pop(para_imputed) <- factor(p_pops)
+
+para_pca <- glPca(para_imputed, nf = Inf)
+para_pct_var <- 100 * (para_pca$eig^2)/(sum(para_pca$eig^2))
+
+# generate pca plot data
+para_pca_dt <- data.table(para_pca$scores, keep.rownames = TRUE)
+setnames(para_pca_dt, "rn", "individual")
+para_pca_dt[, population := para_info[individual, pop_para, on = "indiv_name"]]
+para_pca_dt[, c("loc", "para") := tstrsplit(population, "_")]
+paras <- c("non-parasitized" = "Not detected",
+           "parasitized" = "Detected")
+
+para_pca_dt[, para := plyr::revalue(para, paras)]
+```
+
+```{r rlpara}
+ggplot(para_pca_dt, aes(x = PC1,
+                        y = PC2,
+                        colour = para,
+                        shape = loc)) +
+    coord_fixed() +
+    scale_colour_viridis_d(direction = -1,
+                           guide = guide_legend(
+                               title = "Parasitoid",
+                               override.aes = list(size = 1)
+                           )) +
+    scale_shape_manual(values = c(16, 17),
+                       guide = guide_legend(
+                           title = NULL,
+                           override.aes = list(size = 1))) +
+    xlab(paste0("PC1 (", round(para_pct_var[[1]], 1), "%)")) + 
+    ylab(paste0("PC2 (", round(para_pct_var[[2]], 1), "%)")) + 
+    geom_point(alpha = 0.8, size = 3)
+```
 
 \source{Marissa Le Lec}
+
+
+# What sort of variation do we expect biocontrol to act on?
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+![](img/selection.png){height=70mm}
+
+\endcol
+\begincol{0.5\textwidth}
+
+![](img/F1.large.jpg){height=70mm}
+
+\endcol
+\endcols
+
+\source{
+Trends in Ecology \& Evolution 9 (5): 166–169.
+\href{http://www.sciencedirect.com/science/article/pii/0169534794900795}{10.1016/0169-5347(94)90079-5}; 
+PNAS 116 (21): 10424–10429. \href{https://doi.org/10.1073/pnas.1821713116}{10.1073/pnas.1821713116}.
+}
+
+
+\note{
+\begin{itemize}
+\item Dros / insecticide models of selection
+\item biocontrol never selects outside the fitness distribution, so we don't expect large-effect variants
+\item anthranilic diamides (Chlorantraniliprole) target the ryanodine receptor which is not like earlier insecticides that target neurotransmission
+\item has not been selected for but the genetic architechture for resistance is scattered across the genome in weak variants
+\item the massive heterozygosity in ASW populations is consistent with this
+\end{itemize}
+}
+
 
 # One SNP every `r format(round(1/med_freq, 0), big.mark = ",")` bp
 
@@ -896,15 +992,23 @@ ggplot(n_per_chrom[`SNPs per contig` > 1],
 One every 38 kb is median for the rlpara dataset
 }
 
-\source{Marissa Le Lec}
-
 # Mention RNAseq here?
 
-# Wasp biology
+![](img/sarah_rnaseq.png){height=70mm}
+
+\source{Sarah Inwood}
+
+\note{\begin{itemize}
+\item introduce the wasp biology here
+\item what are the mechanisms by which ASW has escaped control?
+\item talk about immune suppression (manduca example)
+\item immunity? behaviour?
+\item maybe compare to \emph{M. aethiopoides}
+\end{itemize}}
 
 # Parasitoid genomes
 
-![](/home/tom/Projects/microctonus-compare/wga/030_wga/wga.pdf)
+![](data/wga.pdf)
 
 \source{John Skelly}
 

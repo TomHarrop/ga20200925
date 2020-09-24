@@ -25,8 +25,8 @@ slides.pdf: tmp.utf8.md style/header.tex style/body.tex style/footer.tex
 		--include-before-body style/body.tex \
 		--include-after style/footer.tex;
 	# turn off the ignorenonframetext class option (which blocks full-size images)
-	grep -v "ignorenonframetext" slides.tex > slides2.tex ;
-	mv slides2.tex slides.tex ;
+	# grep -v "ignorenonframetext" slides.tex > slides2.tex ;
+	# mv slides2.tex slides.tex ;
 	# run pdflatex twice to get the transparency right
 	pdflatex slides.tex ;
 	pdflatex slides.tex ;

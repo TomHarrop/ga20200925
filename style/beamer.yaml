@@ -1,4 +1,5 @@
 ---
+author: "Tom Harrop"
 output:
   beamer_presentation:
     fig_caption: false
