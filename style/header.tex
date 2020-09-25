@@ -11,9 +11,9 @@
     \and
     \latexincludegraphics[height=5\fontcharht\font`\B]{img/uo.jpg}
     \and
-    \latexincludegraphics[height=3\fontcharht\font`\B]{img/ga.jpg}
-    \quad
     \latexincludegraphics[height=3\fontcharht\font`\B]{img/BioProtection-Centre-logo_green-text_CMYK_2012.png}
+    \quad
+    \latexincludegraphics[height=3\fontcharht\font`\B]{img/ga.jpg}
     }
 
 % Enable lato (installed on unix with `tlmgr install lato`)
@@ -22,9 +22,15 @@
 
 % Paste emojis as graphics
 % Have to use latexincludegraphics because includegraphics has been put in a float
-\DeclareRobustCommand{\emoji1}{%
+\DeclareRobustCommand{\emojione}{%
   \begingroup\normalfont
   \latexincludegraphics[height=\fontcharht\font`\B]{img/blah.png}%
+  \endgroup
+}
+
+\DeclareRobustCommand{\emojitwo}{%
+  \begingroup\normalfont
+  \latexincludegraphics[height=\fontcharht\font`\B]{img/flexed-biceps_medium-skin-tone_1f4aa-1f3fd_1f3fd.png}%
   \endgroup
 }
 
@@ -49,6 +55,7 @@
 \setbeamertemplate{itemize item}{$\bullet$}
 \setbeamertemplate{itemize subitem}{$\bullet$}
 \setbeamertemplate{navigation symbols}{}
+\setbeamercolor{normal text}{fg=black}
 
 % Centre all figures
 \usepackage{letltxmacro}
@@ -88,7 +95,7 @@
 \def\endcols{\end{columns}}
 
 % show layout
-\usepackage{layout}
+% \usepackage{layout}
 
 % enable transparency for background image
 % \usepackage{transparent}

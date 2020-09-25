@@ -234,7 +234,10 @@ nz_map <- ggmap(nz_sm) +
 \note{\begin{itemize}
 \item When you hear biocontrol, you think cane toad
 \item Native to south / central america, around 100 introduced into Australia in 1935 to control cane beetle
-\item Now over 200 million in Australia, disastrous impact on introduced ecosystem
+\item Now over 200 million in Australia
+\item also used in other parts of the world
+\item don't control the cane beetle
+\item disastrous impact on introduced ecosystem
 \end{itemize}}
 
 # Biological control
@@ -243,25 +246,21 @@ nz_map <- ggmap(nz_sm) +
 
 \source{Beatriz Moisset, \href{https://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA}}
 
-\note{\begin{itemize}
-\item start here - introduce coevolution
-\item relies on co-evolution to maintain effectiveness
-\item find a good example of successful biocontrol
-\item mention that no examples of evolution of resistance
-\end{itemize}}
+\note{\tiny{\begin{itemize}
+\item Biological control is a self-sustaining system where an introduced control agent limits populations of its prey or host species
+\item it can been more useful in other cases
+\item this is a cotesia species (braconid wasp) that injects eggs into the tobacco hornworm
+\item the larvae develop inside the host then emerge to pupate
+\item cotesia also co-injects a polydnavirus into the host which interferes with the development of the host
+\item these natural predators are part of the ecosystem that keeps population sizes of potentially damaging insects under control in their native ranges
+\item establishment of biocontrol has a low success rate
+\item once established biocontrol agents usually maintain efficiency
+\item in theory this is because coevolutionary dynamics between the target and the control
+\item the agent may be able to coevolve to counter adaptations in the target and maintain parasitism
+\item if there are any examples of evolved resistance to biocontrol they are rare
+\end{itemize}}}
 
-
-# Argentine stem weevil, *Listronotus bonariensis*
-
-\includegraphics[width=70mm,angle=90]{img/Listronotus_bonariensis_dorsal.jpg}
-
-\source{Landcare Research New Zealand Ltd., \href{https://creativecommons.org/licenses/by/4.0}{CC BY}}
-
-\note{\begin{itemize}
-\item today's example is ...
-\end{itemize}}
-
-# Pasture in NZ, damage by weevils
+# Modified ecosystems have low biotic resistance
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -277,23 +276,37 @@ nz_map <- ggmap(nz_sm) +
 \endcols
 
 \note{\begin{itemize}
-\item it's interesting from the evo point of view but also agriculture
-\item importance of pasture to NZ
-\item history of ASW in NZ
-\item cost of argentine stem weevil damage
+\item agricultural ecosystems can lack diversity of species that may increase resistance in native settings
+\item NZ ryegrass pasture is an example of a highly modified ecosystem based on a low number of introduced species
+\item this makes them quite susceptible to pest impacts
+\item the damage to the ryegrass paddock here is caused by a single arthropod pest
 \end{itemize}}
 
-# Can't be controlled by insecticides
+# Argentine stem weevil, *Listronotus bonariensis*
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+\includegraphics[width=70mm,height=70mm,angle=90]{img/Listronotus_bonariensis_dorsal.jpg}
+
+\endcol
+\begincol{0.5\textwidth}
 
 ![](img/Argentine-stem-weevil-larvae-in-ryegrass-stem2.jpg){height=70mm}
 
-\source{\href{http://agpest.co.nz/?pesttypes=argentine-stem-weevil-larvae}{AgPest}}
+\endcol
+\endcols
+
+\source{Landcare Research New Zealand Ltd., \href{https://creativecommons.org/licenses/by/4.0}{CC BY};
+\href{http://agpest.co.nz/?pesttypes=argentine-stem-weevil-larvae}{AgPest}.}
 
 \note{\begin{itemize}
-\item How ASW damages pasture
-\item stem borer, insecticide doesn't have access
-\item history of ASW in NZ
-\item cost of argentine stem weevil damage
+\item asw probably arrived in NZ in the early 20th century via trade in pasture seeds or hay use for feed during stock transit
+\item can reach high densities in ryegrass pasture
+\item causes up to hundreds of millions of dollars of damage per annum
+\item the larvae bore into the stems and tillers of the ryegrass
+\item because they are inside the stems they are not easy to control with chemicals because the insecticide doesn't have access
+\item uneconomical, not to mention environmental implications of the amount of pesticide that would be required
 \end{itemize}}
 
 # *Microctonus hyperodae*
@@ -302,9 +315,12 @@ nz_map <- ggmap(nz_sm) +
 \source{Mark McNeill, \href{https://creativecommons.org/licenses/by/3.0/us/}{CC-BY-3.0}.}
 
 \note{\begin{itemize}
-\item Mention that ryegrass \emph{is} an introduced ecosystem
-\item Relative lacks of biota etc.
-\item mode of action of Mhyp
+\item Mhyp was released for biological control in 1992
+\item within three years of release parasitism was up to 90% at some sites
+\item resulted in reduced damage to pasture
+\item Mhyp acts by injecting an embyo into the abdomen of ASW
+\item the embyo develops through the larval stage whilst feeding off the ASW
+\item the parasitised ASW is sterile and dies when the larva emerges to pupate outside the host
 \end{itemize}}
 
 # Decline in effectiveness
@@ -314,17 +330,42 @@ nz_map <- ggmap(nz_sm) +
 \source{PNAS 114 (15): 3885–3890. \href{https://doi.org/10.1073/pnas.1618416114}{10.1073/pnas.1618416114}.
 }
 
-
 \note{\begin{itemize}
-\item Mention that ryegrass \emph{is} an introduced ecosystem
-\item Relative lacks of biota etc.
+{\tiny
+\item after initial suppression, control began to fail after about 14 generations
+\item occurred simultaneously
 \item stress that this is a genetic phenomenon
-\item we wanted to look at population genomics so we started by constructing a genome
+\item This decline was not associated with abiotic conditions
+\item we don't know a lot about the molecular events that happen inside the parasitised weevil
+\item we don't know how weevils avoid being killed by Mhyp
+\item behaviour?
+\item genetic immunity?
+\item although there were theoretical studies, we didn't know if the host had enough diversity to adapt to the wasp, and if so, why the wasp wasn't co-evolving
+\item we wanted to look at population genomics of the host, so we started by constructing a genome}
+\item \textbf{Briefly pivot away from this project to talk about arthropod genomics}
+\item \textbf{I was a bit worried this talk would turn out to be "Check out this list of insect genomes I've assembled"}
 \end{itemize}}
 
-# Need for a genome
+# Check out these genomes \emojione \emojitwo
 
-# Poor candidate for short-read genome
+![](img/genomes.pdf){height=70mm}
+
+\note{\begin{itemize}\tiny
+\item Nevertheless, here is a list of genomes
+\item We've used a variety of techniques to assemble arthropod genomes
+\item We did three Vespula species using illumina + HiC
+\item Hymenoptera have compact genomes (250 MB)
+\item we can get a large amount of DNA from a single, haploid individual
+\item You can get a reasonable assembly from short reads alone, and if you add HiC you get chromosomes
+\item Recently nanopore flowcells have become so good that we can run DNA from two drones through a single flowcell and assemble the genome into 40–80 contigs
+\item Stoneflies were more resistant to short-read assemblies
+\item they seem to be quite heterozygous and have a genome around 800 MB
+\item but they're big so we could get plenty of DNA from one individual
+\item we got a pretty good genome using PacBio Hifi at about 50x
+\item velvetworm, 12 GB genome, medium coverage nanopore PromethION (20x or so?) takes months to assemble
+\end{itemize}}
+
+# Short-read genome assembly
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -447,35 +488,33 @@ kha_plot +
 \endcol
 \endcols
 
-\note{\begin{itemize}
+\note{\tiny{\begin{itemize}
+\item this was 2016/2017 so long-read techniques were only just taking off
+\item we didn't have this experience at that point
 \item started by attempting assembly from illumina reads
-\item green shaded area are the homozygous kmers
+\item these are PCR-free sequencing reads generated from 1 individual
+\item we presume it's a diploid
+\item number of unique kmers at each depth
+\item green shaded area are the homozygous kmers identified by the de bruijn assembler, which is diploid aware
 \item earlier peak (lower depth but more kmers) are heterozygous kmers
 \item more kmers are at half depth than at full depth suggesting a highly heterozygous genome
-\item knee in kha plot: large proportion of kmers at higher-than-genome coverage, e.g. repeat regions
-\item small organism (can't get a lot of DNA from a single indiv)
-\item highly heterozygous (pooling not a great idea)
-\item don't breed in the lab (can't inbreed)
-
-\end{itemize}}
+\item the kmer analysis suggested something like 2.1 polymorphic sites per 100 bp
+\item cumulative percentage of kmers at each depth
+\item the raw reads also have a large proportion of kmers at higher-than-genome coverage, e.g. repeat regions
+\item 
+\end{itemize}}}
 
 # We started a genome project by mistake
 
 ![](img/withnail.jpg){height=70mm}
 
 \note{\begin{itemize}
-\item embracing the sunk cost fallacy
-\end{itemize}}
-
-# \emoji1{} Check out these genomes
-
-![](img/genomes.pdf){height=70mm}
-
-\note{\begin{itemize}
-\item Vespula species - illumina + HiC.
-Really easy to assemble haploid material, you get chromosome-level assemblies
-\item stonefly. PacBio Hifi
-\item velvetworm, 12 GB genome, medium coverage nanopore (20x or so?) takes months to assemble, 
+\item lots of people here are familiar with the joys and sorrows of arthropod genome assemblies
+\item small organism (can't get a lot of DNA from a single indiv)
+\item highly heterozygous (pooling not a great idea)
+\item don't breed in the lab (can't inbreed)
+\item not a great candidate for genome assembly
+\item leaning into the sunk cost fallacy
 \end{itemize}}
 
 # Iterative improvements to the genome
@@ -496,10 +535,26 @@ pandoc.table(x,
 \source{Insects 11 (7): 441. \href{https://doi.org/10.3390/insects11070441}{10.3390/insects11070441}.
 }
 
-\note{\begin{itemize}
-\item RNAseq mapping - 75%
-\item long reads - 99.88 %
-\item short reads - 94.71 %
+\note{\begin{itemize}\tiny
+\setlength\itemsep{0em}
+\item short read "assembly" not satisfactory for what we wanted to use it for
+\item two nanopore datasets for long-read assembly
+\item 29.8 Gb of reads with an N50 length of 9 kb (WGA from single indiv)
+\item reduced N50 length is caused by the amplification process
+\item creates forked DNA molecules that need to be chopped up to go through the pore
+\item 2nd: 12 Gb of of reads from three pools of 20 individuals each, sequenced without amplification
+\item sequenced at the Genomics Aotearoa ONT MinION workshop, which we ran in Dunedin in april 2018
+\item  biggest improvements from updated basecalling models (guppy flip-flop) and assembly algorithms (Flye's nanopore error correction module)
+\item assembled with Flye 2.6 from reads basecalled with guppy 3.4.1
+\item BUSCO rule of thumb to monitor whether iterations were improving the assembly (not an absolute measure of quality)
+\item single indiv, long read: 10x improvement in contiguity over the short-read genome 
+\item longer reads from the pooled samples improved contiguity but slightly reduced the busco completeness - suspect due to heterozygosity
+\item next iteration used the longer pooled reads to construct contigs and then the single-indiv dataset for flye's polishing module
+\item improved the contiguity vs single indiv assembly but produced a large number of redundant contigs
+\item for the final draft removed shorter redundant contigs with  Purge Haplotigs
+\item maintained the higher busco completeness but controlled the number of duplicated genes
+\item all of the long read genomes had at least 70% repetitiveness according to RepeatMasker
+\item this was after subsetting the assemblies using Funannotate clean (leave one out alignment), because RM wouldn't run on the full genome 
 \end{itemize}}
 
 # Nanopore genome
@@ -510,17 +565,26 @@ pandoc.table(x,
 }
 
 \note{\begin{itemize}
-\item The genome is now on NCBI
+\item RNAseq mapping - 75\%, long reads - 99.88\%, short reads - 94.71\%
+\item Draft genome is now on NCBI, so no more iterations
 \end{itemize}}
 
-# Geographical survey
+# Survey of ASW diversity in NZ
 
 ```{r geo_surv}
 print(nz_map)
 ```
+
 \source{
 Map tiles by
 \href{http://stamen.com}{Stamen Design} under \href{http://creativecommons.org/licenses/by/3.0}{CC BY 3.0}, with data by \href{http://openstreetmap.org}{OpenStreetMap} under \href{http://www.openstreetmap.org/copyright}{ODbL}.}
+
+\note{\begin{itemize}
+\item ASW collected from commercially-farmed ryegrass - white clover pastures
+\item 10 sites across New Zealand
+\item ended up with about 10 individuals per site
+\item used GBS (double-digest RADseq)
+\end{itemize}}
 
 # `r format(snps_imputed$n.loc, big.mark = ",")` SNPs after processing, calling and filtering
 
@@ -564,14 +628,24 @@ ggplot(pd, aes(x = pop2, y = value, col = pop2)) +
 ```
 
 
-\note{
-1-1.5 million reads per individual
-}
-
-\note{
-- need stuff about the adaptor trimming strategy here
-- number of loci, coverage per locus
-}
+\note{\begin{itemize}\tiny
+\item GBS was done by AgResearch using individual weevil heads
+\item dd was ApeKI and MspI
+\item started with 1-1.5 million, 100b single-end reads per individual
+\item began throwing out data
+\item Samples demultiplexed with zero allowed barcode mismatches to 91–93 b reads, depending on barcode
+\item trimmed by searching for adaptors with a minimum match of 11 b 
+\item Reads shorter than 80 b after trimming were discarded
+\item All remaining reads were truncated to 80 b to account for unmatched adaptor sequence < 11 b at the end of reads
+\item this trimming strategy meant I threw out over 30% of the raw data
+\item mapping against the draft genome was good
+\item Lincoln samples are an outlier and clearly map differently
+\item after mapping used gstacks to assemble mapped reads into loci
+\item removed sites with more than 2 alleles, minor allele frequency
+<0.05, or missing genotypes in more than 20% of individuals
+\item removed individuals that had missing genotypes at more than 20% of loci
+\item mean depth in the final dataset was around 10 reads per SNP
+\end{itemize}}
 
 # `r gt`
 
@@ -610,7 +684,15 @@ ggplot(pca_dt, aes(x = PC1, y = PC2, colour = population)) +
 \endcol
 \endcols
 
-# DAPC of PCs 1--`r xv_npca`
+\note{\begin{itemize}
+\item after pruning for LD, 18,715 biallelic SNPs
+\item populations overlap on the PCA
+\item there is a north-south cline visible on the first principle component
+\item only 9.2% of variance is explained by the first two PCs, so a large proportion of the variance is not structured
+\item 
+\end{itemize}}
+
+# DAPC of PCs 1–`r xv_npca`
 
 ```{r popgen4}
 # generate dapc plot data
@@ -654,7 +736,13 @@ ggplot(dapc_pd[dapc_var > 1],
                position = position_jitter(width = 0.2))
 ```
 
-# Assigned population
+\note{\begin{itemize}
+\item zoomed in on the structured variance using discriminant analysis of principal components
+\item major linear discriminant separates populations from north and south of the Main Divide
+\item a less-prominent LD highlights the Lincoln population - probably a technical artefact
+\end{itemize}}
+
+# Group memberships
 
 ```{r dapc_post}
 
@@ -706,54 +794,14 @@ grid::grid.draw(gt)
 
 ```
 
-# High heterozygosity (`r sprintf('%.02f', hetran[[1]])`--`r sprintf('%.02f', hetran[[2]])`), low structure
-
-\begincols[c]
-\begincol{0.5\textwidth}
-
-```{r popgen7, fig.width = fw * 0.5}
-print(nz_map)
-```
-
-\endcol
-\begincol{0.5\textwidth}
-
-```{r pairwise_fst, fig.width = fw * 0.5}
-ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
-    theme_minimal(base_size = 8 ) +
-    theme(axis.text.x = element_text(angle = 90,
-                                     hjust = 1,
-                                     vjust = 0.5,
-                                     colour = lab_cols),
-          axis.text.y = element_text(colour = lab_cols),
-          legend.key.size = unit(0.8, "lines")) +
-    xlab(NULL) + ylab(NULL) +
-    scale_x_discrete(expand = c(0, 0)) +
-    scale_y_discrete(expand = c(0, 0)) +
-    # scale_y_discrete(limits = rev(levels(fst_pd$pop2)),
-    #                  expand = c(0, 0)) +
-    scale_fill_gradientn(
-        colours = fill_cols,
-        guide = guide_colorbar(
-            title = expression(italic("F")["ST"]))) +
-    geom_raster()
-
-```
-
-\endcol
-\endcols
-
-# Previous measures of genetic diversity
-
-- maybe a RAPD gel? or something random
-
 \note{\begin{itemize}
-\item molecular markers go here.
-\item "there is a high degreeof genetic similarity between populations throughoutthe country" (RAPD paper)
-\item "Only one haplotype of COI was found in all of the L. bonariensis specimens collected from eight sites throughout New Zealand" (COI sequencing)
+\item the DAPC posteriors can be used to estimate each individual's "group membership" 
+\item gives an indication of how strong the genetic clusters are
+\item \textbf{i used the \emph{a}-score / XV-thing to verify it}
+\item all of the southern populations contained individuals with moderate probability of membership to other southern popuations
+\item same for northern populations
+\item however not a lot of southern individuals with probability of membership to northern populations, and vice versa
 \end{itemize}}
-
-# Introduce unequal arms race
 
 # Main divide separates ASW populations
 
@@ -794,11 +842,15 @@ ggplot(dapc_pd[component == "LD1"],
 \endcol
 \endcols
 
+\note{\begin{itemize}
+\item remembering that this is a low amount of the overall variation
+\item the main divide, which runs from north to south in the south island, seems to be some sort of barrier to mixing of weevil populations
+\item Greymouth is north of the main divide and on the south island, but clusters with northern populations
+\end{itemize}}
+
 # Demographic modelling
 
 ```{r fsc}
-
-
 # model 0: iv, model 1: i, model 2: iii, model 3: ii, model 4: v
 model_map <- c(
     model1 =   "i",
@@ -852,24 +904,95 @@ plot_grid(ggdraw() + draw_image(model_diagram),
           lhood_plot,
           align = "h",
           axis = "l",
+          rel_heights = c(10, 8),
           ncol = 1)
 
 ```
 
 \source{Marissa Le Lec}
 
-\note{
+\note{\tiny
 \begin{itemize}
-\item Why are the models so weird? Look at diagnostic plot.
+\item it does raise the question of whether current NZ populations derived from a single incursion of weevils or separate incursions into the north and south island
+\item we tried to test this with demographic modelling using fastsimcoal2
+\item work done by Marissa
+\item models i and ii represent introduction via a single route.
+\item In model i the population contracts on introduction and then begins expanding before dispersal.
+\item In model ii, dispersal occurs while the effective population size remains small.
+\item Models iii and iv represent multiple routes of entry, with or
+without reduction in population size compared to the current populations in New Zealand.
+\item Model v represents introduction to different sites from source populations that were isolated prior to introduction.
+\item we ran each model 100 times with and without migration, with 1M simulations each
+\item although the models that included migration had lower delta likelihoods, the rate of migration estimated was very low
+\item can't really differentiate single or multiple routes of entry
+\item models two and three have the lowest delta likelihoods, suggesting that the populations were separated before undergoing bottlenecks
 \end{itemize}
 }
 
-# SNPs don't diff para
+# High heterozygosity (`r sprintf('%.02f', hetran[[1]])`--`r sprintf('%.02f', hetran[[2]])`), low structure
 
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r popgen7, fig.width = fw * 0.5}
+print(nz_map)
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+```{r pairwise_fst, fig.width = fw * 0.5}
+ggplot(fst_pd, aes(x = pop1, y = pop2, fill = Fst)) +
+    theme_minimal(base_size = 8 ) +
+    theme(axis.text.x = element_text(angle = 90,
+                                     hjust = 1,
+                                     vjust = 0.5,
+                                     colour = lab_cols),
+          axis.text.y = element_text(colour = lab_cols),
+          legend.key.size = unit(0.8, "lines")) +
+    xlab(NULL) + ylab(NULL) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0)) +
+    # scale_y_discrete(limits = rev(levels(fst_pd$pop2)),
+    #                  expand = c(0, 0)) +
+    scale_fill_gradientn(
+        colours = fill_cols,
+        guide = guide_colorbar(
+            title = expression(italic("F")["ST"]))) +
+    geom_raster()
+
+```
+
+\endcol
+\endcols
+
+\note{\begin{itemize}\tiny
+\item more generally, the heterozygosity ranged 0.18–0.21 across populations \item pairwise F ST values were between 0.024–0.051
+\item the high heterozygosity and low structure is consistent with a large effective population size
+\item this would be consistent with a large incursion and/or repeated introductions, or an outrageous mutation rate
+\item contrasts with what was found previously with traditional molecular markers (RAPD and COI sequencing)
+\item Previous reports using randomly amplified polymorphic DNA (RAPD) markers and cytochrome C oxidase subunit I (COI) sequencing suggested a high degree of genetic similarity and identified a single COI haplotype in New Zealand populations
+\item "there is a high degreeof genetic similarity between populations throughoutthe country" (RAPD paper)
+\item "Only one haplotype of COI was found in all of the L. bonariensis specimens collected from eight sites throughout New Zealand" (COI sequencing)
+\end{itemize}}
+
+# Unequal arms race
+
+![](img/journal.pone.0207610.g001.PNG){height=70mm}
+
+\source{PLOS ONE 13 (12): e0207610. \href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0207610}{10.1371/journal.pone.0207610}.
+}
+
+\note{\begin{itemize}
+\item empirical modelling has shown that a higher amount of genetic variation in the host could allow it to evolve resistance to biocontrol
+\item the parasitoid reproduces asexually so we would expect variation to be lower
+\item the high amount of heterozygosity in ASW is evidence that they were able to out-evolve the control agent
+\end{itemize}}
+
+# No genetic variation associated with parasitoid detection
 
 ```{r rlpara_prep, results = "hide"}
 para_info_file <- "data/para_sample_info.tsv"
-
 
 # get the info
 para_info <- fread(para_info_file)
@@ -925,6 +1048,10 @@ ggplot(para_pca_dt, aes(x = PC1,
 
 \source{Marissa Le Lec}
 
+\note{\begin{itemize}
+\item During honours project Marissa tried to detect weevil SNPs associated with the detection of a parasitoid
+\item There was no sign of differentiation between weevils with and without a parasitoid detected
+\end{itemize}}
 
 # What sort of variation do we expect biocontrol to act on?
 
@@ -948,16 +1075,17 @@ PNAS 116 (21): 10424–10429. \href{https://doi.org/10.1073/pnas.1821713116}{10.
 }
 
 
-\note{
+\note{\tiny
 \begin{itemize}
-\item Dros / insecticide models of selection
-\item biocontrol never selects outside the fitness distribution, so we don't expect large-effect variants
+\item in the insecticide resistance theory suggests that applying insecticide doses that don't kill all individuals (i.e. applying selection within the survivability distribution) would select for variants of small effect already present in the population, wheras higher doses select for novel mutations of large effect
+\item biocontrol never selects outside the fitness distribution because you can't have > 100% parasitism, so we don't expect large-effect variants
 \item anthranilic diamides (Chlorantraniliprole) target the ryanodine receptor which is not like earlier insecticides that target neurotransmission
 \item has not been selected for but the genetic architechture for resistance is scattered across the genome in weak variants
 \item the massive heterozygosity in ASW populations is consistent with this
+\item likely selecting for standing variation that was already present in the population
+\item indicates that genetic variation in both host and biocontrol agent need to be monitored with high-resolution genotyping to maintain success of biological control.
 \end{itemize}
 }
-
 
 # One SNP every `r format(round(1/med_freq, 0), big.mark = ",")` bp
 
@@ -989,21 +1117,20 @@ ggplot(n_per_chrom[`SNPs per contig` > 1],
 \endcols
 
 \note{
-One every 38 kb is median for the rlpara dataset
+One every 38 kb is median for the rlpara dataset. Would need a stronger resistance phenotype, more indivs and a much higher resolution genotyping to detect anything.
 }
 
-# Mention RNAseq here?
+# What is the resistance mechanism?
 
 ![](img/sarah_rnaseq.png){height=70mm}
 
 \source{Sarah Inwood}
 
 \note{\begin{itemize}
-\item introduce the wasp biology here
 \item what are the mechanisms by which ASW has escaped control?
-\item talk about immune suppression (manduca example)
-\item immunity? behaviour?
-\item maybe compare to \emph{M. aethiopoides}
+\item immunity? evolved resistance to the infection?
+\item behavioural avoidance of parasitism?
+\item Sarah Inwood is looking at this with RNAseq of parasitized and unparasitized weevils to look at the response of the host to parasitism, and other things.
 \end{itemize}}
 
 # Parasitoid genomes
@@ -1012,20 +1139,105 @@ One every 38 kb is median for the rlpara dataset
 
 \source{John Skelly}
 
+\note{\begin{itemize}
+\item one of the remaining questions is the amount of diversity in the parasitoid population
+\item we have done high-quality assemblies of Mhyp and a closely related species, Maeth, that parasitizes clover root weevil and reproduces asexually
+\item John Skelly is looking at differences between their genomes to try to find out how they reproduce asexually and what the genomic implications are
+\end{itemize}}
+
+
 # Genetic diversity in the parasitoid?
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+```{r para_surv, fig.width = fw * 0.5}
+print(nz_map)
+```
+
+\endcol
+\begincol{0.5\textwidth}
+
+- Geographical survey of NZ populations of *M. hyperodae*
+- Historical speciments from 7 ecotypes that were collected from South America
+
+\endcol
+\endcols
 
 \source{Ciar\'{a}n Cuddy}
 
 \note{\begin{itemize}
-\item note implications for monitoring biocontrol
-\item maybe compare to \emph{M. aethiopoides}
+\item 7 individuals were brought to New Zealand for mass rearing before release
+\item samples were taken at various generations during mass rearing
+\item a mix of ecotypes were released but we haven't monitored whether different ecotypes established in different regions
+\item Ciaran Cuddy is doing the genotyping for this
 \end{itemize}}
 
+# Acknowledgements
 
-# Ppl to thank
+\begincols[c]
+\begincol{0.35\textwidth}
 
-- Goldson, Malvika, Lokesh
-- Weevil dissectors
-- 
+**Stephen Goldson and group**
 
+Malvika Bana  
+Lokesh Kumar  
+Shola Olaniyan
+
+\vspace{2mm}
+
+**AgResearch Invermay**
+
+Colin Ferguson  
+Dianne Barton  
+Tracey van Stijn  
+Hannah Henry  
+Rachael Ashby  
+
+\endcol
+\begincol{0.35\textwidth}
+
+**AgResearch Grasslands & Lincoln**
+
+Jeanne Jacobs  
+Ruy Jauregui  
+Siva Ganesh
+
+\vspace{2mm}
+
+**Peter Dearden and group**
+
+Marissa Le Lec  
+Sarah Inwood  
+John Skelly  
+Shannon Taylor  
+Ciarán Cuddy  
+Elva Dong  
+
+\endcol
+\begincol{0.3\textwidth}
+
+\begin{centering}
+
+\latexincludegraphics[height=5\fontcharht\font`\B]{img/uo.jpg}
+
+\vspace{2mm}
+
+\latexincludegraphics[height=3\fontcharht\font`\B]{img/BioProtection-Centre-logo_green-text_CMYK_2012.png}
+
+\vspace{2mm}
+
+\latexincludegraphics[height=3\fontcharht\font`\B]{img/ga.jpg}
+
+\end{centering}
+
+\endcol
+\endcols
+
+\note{\begin{itemize}
+\item Professor Stephen Goldson worked on ASW for decades
+\item he introduced \emph{M. hyp} to NZ and leads the BPRC project
+\item his team collected samples for the geographical survey and did dissections for the comparison between parasitised and unparasitised indivs
+\item they're also supplying us with samples for the survey of diversity in hyp
+\end{itemize}}
 
